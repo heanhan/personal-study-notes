@@ -1,0 +1,8 @@
+记录电脑的开发环境的安装位置
+
+node 的安装位置
+
+This package has installed:
+	•	Node.js v12.16.2 to /usr/local/bin/node
+	•	npm v6.14.4 to /usr/local/bin/npm
+Make sure that /usr/local/bin is in your $PATH.

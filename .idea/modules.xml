@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/java-developer-document/知识库/Java/07-第三方组件工具/Arthas/demo-arthas/src/main/main.iml" filepath="$PROJECT_DIR$/java-developer-document/知识库/Java/07-第三方组件工具/Arthas/demo-arthas/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/personal-study-notes.iml" filepath="$PROJECT_DIR$/.idea/personal-study-notes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-developer-document/知识库/Java/07-第三方组件工具/Arthas/demo-arthas/src/test/test.iml" filepath="$PROJECT_DIR$/java-developer-document/知识库/Java/07-第三方组件工具/Arthas/demo-arthas/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-developer-document/知识库/运维/运维.iml" filepath="$PROJECT_DIR$/java-developer-document/知识库/运维/运维.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mysql-connector-java-8.0.30">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/java-developer-document/知识库/Java/07-第三方组件工具/SeaTunnel/plugins/jdbc/lib/mysql-connector-java-8.0.30.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

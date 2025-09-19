@@ -1,0 +1,7 @@
+### volatile和synchronized的区别
+
+synchronized关键字和volatile关键字是两个互补的存在，而不是独立的存在
+
+- volatile关键字是线程同步的轻量级实现，所以volatile性能，肯定比synchronized关键字要好，但是volatile关键字只能用于**变量**而synchronized关键字用于可以修饰的方法和代码块。
+- volatile关键字能保证数据的可见性，但不能保证数据原子性。synchronized关键字两者都能保证。
+- volatile关键字主要用于解决变量在多个线程之间的可见性，而synchronized关键字解决的是多个线程之间资源的访问的同步性问题。
