@@ -89,13 +89,13 @@ sudo cat /opt/mysql8/mysql/data/*.err | grep password
    ```bash
    [mysqld]
    user=mysql
-   basedir=/usr/local/mysql
-   datadir=/usr/local/mysql/data
-   socket=/tmp/mysql.sock
+   basedir=/opt/mysql8/mysql
+   datadir=/opt/mysql8/mysql/data
+   socket=/opt/mysql8/mysql/tmp/mysql.sock
    port=3306
-   pid-file=/usr/local/mysql/data/mysqld.pid
+   pid-file=/opt/mysql8/mysql/data/mysqld.pid
    [client]
-   socket=/tmp/mysql.sock
+   socket=/opt/mysql8/mysql/tmp/mysql.sock
    ```
 
    保存并退出。
@@ -175,13 +175,153 @@ mysql -u root -p
 更改 root 密码：
 
 ```bash
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'YourNewPassword';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'abcd@123456';
 FLUSH PRIVILEGES;
 ```
 
 将 YourNewPassword 替换为你想要设置的密码。
 
-#### 12. 验证安装
+开启远程连接
+
+#### 12、开启 MySQL 8.0 远程连接
+
+##### 1. 修改 MySQL 配置文件
+
+MySQL 默认只监听本地连接（127.0.0.1）。要允许远程连接，需要修改 bind-address 设置。
+
+1. 编辑 MySQL 配置文件 
+
+   /etc/my.cnf
+
+   （或你之前配置的路径，如 
+
+   /usr/local/mysql/my.cnf
+
+   ）：
+
+   bash
+
+   ```
+   sudo nano /etc/my.cnf
+   ```
+
+2. 找到 
+
+   [mysqld]
+
+    部分，确保 
+
+   bind-address
+
+    设置为 
+
+   0.0.0.0
+
+   （监听所有 IP 地址）：
+
+   ini
+
+   ```
+   [mysqld]
+   bind-address = 0.0.0.0
+   ```
+
+   - 如果没有 bind-address 行，直接添加。
+
+   - 确保配置文件中已包含：
+
+     ini
+
+     ```
+     user=mysql
+     basedir=/opt/mysql8/mysql
+     datadir=/opt/mysql8/mysql/data
+     socket=/opt/mysql8/mysql/tmp/mysql.sock
+     port=3306
+     pid-file=/opt/mysql8/mysql/data/mysqld.pid
+     ```
+
+3. 保存并退出。
+
+##### 2. 重启 MySQL 服务
+
+应用配置更改需要重启 MySQL。如果你是通过 systemd 管理 MySQL，运行：
+
+bash
+
+```
+sudo systemctl restart mysql
+```
+
+##### 3. 配置 MySQL 用户权限
+
+MySQL 8.0 默认限制 root 用户仅能从 localhost 登录。你需要为远程访问创建或修改用户权限。
+
+1. 登录 MySQL：
+
+   bash
+
+   ```
+   mysql -u root -p
+   ```
+
+   输入 root 密码。
+
+2. 检查现有用户和主机：
+
+   sql
+
+   ```
+   SELECT user, host FROM mysql.user;
+   ```
+
+   输出会显示所有用户及其允许连接的主机。例如，
+
+   root@localhost
+
+    表示 root 只能从本地登录。
+
+3. 允许远程连接：
+
+   - 选项 1：修改现有 root 用户
+
+     （不推荐，仅用于测试环境）：
+
+     sql
+
+     ```sql
+     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'abcd@123456';
+     GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'abcd@123456';
+     FLUSH PRIVILEGES;
+     ```
+
+     - % 表示允许从任何 IP 地址连接。
+     - 替换 YourRootPassword 为你的 root 密码。
+     - mysql_native_password 是为了兼容某些客户端（如旧版 MySQL 客户端）。如果使用新版客户端，可以省略 IDENTIFIED WITH mysql_native_password。
+
+     如果执行  GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'abcd@123456'; 报错  执行 
+
+     ```sql
+     SELECT user, host, plugin FROM mysql.user WHERE user = 'root';
+     ```
+
+     如果是 localhost 
+
+     +------+------+-----------------------+
+     | user | host | plugin                |
+     +------+------+-----------------------+
+     | root | localhost    | mysql_native_password |
+     +------+------+-----------------------+
+
+     需要更换执行语句也可以创建一个新的 
+
+     ```sql
+     CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'abcd@123456'; 
+     GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'abcd@123456';
+     FLUSH PRIVILEGES;
+     ```
+
+#### 13. 验证安装
 
 检查 MySQL 版本：
 
